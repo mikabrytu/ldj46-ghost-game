@@ -2,46 +2,49 @@
 using Mikabrytu.LD46.Systems;
 using UnityEngine;
 
-public class AIMovementSystem : IMove
+namespace Mikabrytu.LD46.Systems
 {
-    private Vector3 moveDirection;
-    private float speed;
-    private float raycastLimit;
-
-    public void Setup(float speed, float raycastLimit)
+    public class AIMovementSystem : IMove
     {
-        this.speed = speed;
-        this.raycastLimit = raycastLimit;
-    }
+        private Vector3 moveDirection;
+        private float speed;
+        private float raycastLimit;
 
-    public void Setup(Vector3 direction)
-    {
-        moveDirection = direction;
-    }
+        public void Setup(float speed, float raycastLimit)
+        {
+            this.speed = speed;
+            this.raycastLimit = raycastLimit;
+        }
 
-    public void Move(Transform transform)
-    {
-        transform.Translate(moveDirection * speed * Time.deltaTime);
-    }
+        public void Setup(Vector3 direction)
+        {
+            moveDirection = direction;
+        }
 
-    public void TriggerMovement(Transform transform)
-    {
-        List<Vector3> viablePaths = new List<Vector3>();
-        if (!IsCloseToWallAt(transform, Vector3.forward)) viablePaths.Add(Vector3.forward);
-        if (!IsCloseToWallAt(transform, Vector3.back)) viablePaths.Add(Vector3.back);
-        if (!IsCloseToWallAt(transform, Vector3.left)) viablePaths.Add(Vector3.left);
-        if (!IsCloseToWallAt(transform, Vector3.right)) viablePaths.Add(Vector3.right);
+        public void Move(Transform transform)
+        {
+            transform.Translate(moveDirection * speed * Time.deltaTime);
+        }
 
-        moveDirection = viablePaths[Random.Range(0, viablePaths.Count)];
-    }
+        public void TriggerMovement(Transform transform)
+        {
+            List<Vector3> viablePaths = new List<Vector3>();
+            if (!IsCloseToWallAt(transform, Vector3.forward)) viablePaths.Add(Vector3.forward);
+            if (!IsCloseToWallAt(transform, Vector3.back)) viablePaths.Add(Vector3.back);
+            if (!IsCloseToWallAt(transform, Vector3.left)) viablePaths.Add(Vector3.left);
+            if (!IsCloseToWallAt(transform, Vector3.right)) viablePaths.Add(Vector3.right);
 
-    private bool IsCloseToWallAt(Transform transform, Vector3 direction)
-    {
-        RaycastHit hit;
-        Debug.DrawRay(transform.position, direction * raycastLimit, Color.green);
-        if (Physics.Raycast(transform.position, direction, out hit, raycastLimit))
-            return hit.collider.gameObject.tag == "Wall";
-        else
-            return false;
+            moveDirection = viablePaths[Random.Range(0, viablePaths.Count)];
+        }
+
+        private bool IsCloseToWallAt(Transform transform, Vector3 direction)
+        {
+            RaycastHit hit;
+            Debug.DrawRay(transform.position, direction * raycastLimit, Color.green);
+            if (Physics.Raycast(transform.position, direction, out hit, raycastLimit))
+                return hit.collider.gameObject.tag == "Wall";
+            else
+                return false;
+        }
     }
 }

@@ -1,35 +1,38 @@
 ﻿using Mikabrytu.LD46.Systems;
 
-public class HealthSystem : IHealth
+namespace Mikabrytu.LD46.Systems
 {
-    private int currentBPM;
-    private int heartAttackLimit;
-    private int pulse;
-
-    public void Setup(int heartAttackLimit, int pulse)
+    public class HealthSystem : IHealth
     {
-        this.heartAttackLimit = heartAttackLimit;
-        this.pulse = pulse;
-        currentBPM = heartAttackLimit / 2;
-    }
+        private int currentBPM;
+        private int heartAttackLimit;
+        private int pulse;
 
-    public void IncreaseBPM()
-    {
-        currentBPM += pulse;
-    }
+        public void Setup(int heartAttackLimit, int pulse)
+        {
+            this.heartAttackLimit = heartAttackLimit;
+            this.pulse = pulse;
+            currentBPM = heartAttackLimit / 2;
+        }
 
-    public void DecreaseBPM()
-    {
-        currentBPM -= pulse;
-    }
+        public void IncreaseBPM()
+        {
+            currentBPM += pulse;
+        }
 
-    public int GetBPM()
-    {
-        return currentBPM;
-    }
+        public void DecreaseBPM()
+        {
+            currentBPM -= pulse;
+        }
 
-    public bool isDead()
-    {
-        return currentBPM >= heartAttackLimit;
+        public int GetBPM()
+        {
+            return currentBPM;
+        }
+
+        public bool isDead()
+        {
+            return currentBPM >= heartAttackLimit;
+        }
     }
 }

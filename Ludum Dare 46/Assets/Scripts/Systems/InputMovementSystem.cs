@@ -1,44 +1,47 @@
 ﻿using Mikabrytu.LD46.Systems;
 using UnityEngine;
 
-public class InputMovementSystem : IMove
+namespace Mikabrytu.LD46.Systems
 {
-    private float speed = 0;
-
-    public void Setup(float speed, float raycastLimit)
+    public class InputMovementSystem : IMove
     {
-        this.speed = speed;
-    }
+        private float speed = 0;
 
-    public void Move(Transform transform)
-    {
-        if (Input.GetKey(KeyCode.D))
+        public void Setup(float speed, float raycastLimit)
         {
-            transform.Translate(Vector3.forward * speed * Time.deltaTime);
+            this.speed = speed;
         }
 
-        if (Input.GetKey(KeyCode.A))
+        public void Move(Transform transform)
         {
-            transform.Translate(Vector3.back * speed * Time.deltaTime);
+            if (Input.GetKey(KeyCode.D))
+            {
+                transform.Translate(Vector3.forward * speed * Time.deltaTime);
+            }
+
+            if (Input.GetKey(KeyCode.A))
+            {
+                transform.Translate(Vector3.back * speed * Time.deltaTime);
+            }
+
+            if (Input.GetKey(KeyCode.W))
+            {
+                transform.Translate(Vector3.left * speed * Time.deltaTime);
+            }
+            if (Input.GetKey(KeyCode.S))
+            {
+                transform.Translate(Vector3.right * speed * Time.deltaTime);
+            }
         }
 
-        if (Input.GetKey(KeyCode.W))
+        public void Setup(Vector3 direction)
         {
-            transform.Translate(Vector3.left * speed * Time.deltaTime);
+            throw new System.NotImplementedException();
         }
-        if (Input.GetKey(KeyCode.S))
+
+        public void TriggerMovement(Transform transform)
         {
-            transform.Translate(Vector3.right * speed * Time.deltaTime);
+            throw new System.NotImplementedException();
         }
-    }
-
-    public void Setup(Vector3 direction)
-    {
-        throw new System.NotImplementedException();
-    }
-
-    public void TriggerMovement(Transform transform)
-    {
-        throw new System.NotImplementedException();
     }
 }
