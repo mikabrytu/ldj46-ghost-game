@@ -5,7 +5,7 @@ public class InputMovementSystem : IMove
 {
     private float speed = 0;
 
-    public void Setup(float speed)
+    public void Setup(float speed, float raycastLimit)
     {
         this.speed = speed;
     }
@@ -30,5 +30,15 @@ public class InputMovementSystem : IMove
         {
             transform.Translate(Vector3.right * speed * Time.deltaTime);
         }
+    }
+
+    public void Setup(Vector3 direction)
+    {
+        throw new System.NotImplementedException();
+    }
+
+    public void TriggerMovement(Transform transform)
+    {
+        throw new System.NotImplementedException();
     }
 }

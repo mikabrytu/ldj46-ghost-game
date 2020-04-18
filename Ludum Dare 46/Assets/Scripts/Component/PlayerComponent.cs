@@ -14,7 +14,7 @@ public class PlayerComponent : MonoBehaviour, IPlayer
         moveSystem = new InputMovementSystem();
         healthSystem = new HealthSystem();
 
-        moveSystem.Setup(speed);
+        moveSystem.Setup(speed, 0);
     }
 
     private void Update()
