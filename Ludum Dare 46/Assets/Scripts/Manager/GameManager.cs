@@ -2,6 +2,8 @@
 using UnityEngine;
 using Mikabrytu.LD46.Components;
 using Mikabrytu.LD46.Events;
+using System.Collections.Generic;
+using System.Collections;
 
 namespace Mikabrytu.LD46
 {
@@ -9,9 +11,14 @@ namespace Mikabrytu.LD46
     {
         [SerializeField] private IPlayer player;
         [SerializeField] private IGhost ghost;
-        [SerializeField] private IBrokenStuff brokenStuff;
+        [SerializeField] private List<GameObject> brokenStuffPrefabs;
+        [SerializeField] private List<Transform> brokenStuffSpawnPoints;
+        [SerializeField] private float breakStuffTime = 10f;
 
+        private IEnumerator breakRoutine;
         private UIManager uiManager;
+        private int brokenStuffCount;
+        private int brokenStuffIndex;
 
         protected override void Awake()
         {
@@ -23,6 +30,9 @@ namespace Mikabrytu.LD46
             uiManager = GetComponent<UIManager>();
 
             EventManager.AddListener<PlayerIsDeadEvent>(GameOver);
+            EventManager.AddListener<PlayerFixedStuffEvent>(OnPlayerFixed);
+
+            CallGame();
         }
 
         #region Game States
@@ -39,7 +49,7 @@ namespace Mikabrytu.LD46
 
         private void CallGame()
         {
-
+            StartGame();
         }
 
         #endregion
@@ -49,7 +59,20 @@ namespace Mikabrytu.LD46
 
         public void StartGame()
         {
+            SpawnBrokenStuff();
+            SpawnGhost();
+        }
 
+        public void OnPlayerFixed(PlayerFixedStuffEvent e)
+        {
+            brokenStuffCount--;
+            if (brokenStuffCount < 0)
+                brokenStuffCount = 0;
+
+            if (breakRoutine != null)
+                StopCoroutine(breakRoutine);
+
+            SpawnBrokenStuff();
         }
 
         public void GameOver(PlayerIsDeadEvent e)
@@ -70,35 +93,33 @@ namespace Mikabrytu.LD46
 
         public void SpawnBrokenStuff()
         {
+            if (brokenStuffCount > (brokenStuffPrefabs.Count - 1))
+                return;
 
+            Instantiate(
+                brokenStuffPrefabs[brokenStuffIndex],
+                brokenStuffSpawnPoints[UnityEngine.Random.Range(0, brokenStuffSpawnPoints.Count)].position,
+                Quaternion.identity);
+
+            brokenStuffCount++;
+
+            if (brokenStuffIndex >= (brokenStuffPrefabs.Count - 1))
+                brokenStuffIndex = 0;
+            else
+                brokenStuffIndex++;
+
+            breakRoutine = BreakStuffTimer();
+            StartCoroutine(breakRoutine);
         }
 
         #endregion
 
-
-        #region Zones
-
-        public void InsideCaptureZone()
+        public IEnumerator BreakStuffTimer()
         {
+            yield return new WaitForSeconds(breakStuffTime);
 
+            SpawnBrokenStuff();
         }
-
-        public void OutsideCaptureZone()
-        {
-
-        }
-
-        public void InsideFixZone()
-        {
-
-        }
-
-        public void OutsideFixZone()
-        {
-
-        }
-
-        #endregion
 
     }
 }

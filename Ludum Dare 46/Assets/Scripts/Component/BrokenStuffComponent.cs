@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using Mikabrytu.LD46.Components;
 using Mikabrytu.LD46.Systems;
+using Mikabrytu.LD46.Events;
 using System.Collections;
 
 public class BrokenStuffComponent : MonoBehaviour, IBrokenStuff
@@ -43,6 +44,7 @@ public class BrokenStuffComponent : MonoBehaviour, IBrokenStuff
     private void OnFixFinish()
     {
         Debug.Log("Fix Finished");
+        EventManager.Raise(new PlayerFixedStuffEvent());
         Destroy(gameObject);
     }
 }
