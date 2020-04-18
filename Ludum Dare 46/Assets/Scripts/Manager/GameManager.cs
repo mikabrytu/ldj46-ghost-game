@@ -21,6 +21,8 @@ namespace Mikabrytu.LD46
         private void Start()
         {
             uiManager = GetComponent<UIManager>();
+
+            EventManager.AddListener<PlayerIsDeadEvent>(GameOver);
         }
 
         #region Game States
@@ -50,24 +52,10 @@ namespace Mikabrytu.LD46
 
         }
 
-        public void GameOver()
+        public void GameOver(PlayerIsDeadEvent e)
         {
-
-        }
-
-        #endregion
-
-
-        #region Player
-
-        public void IncreaseFear()
-        {
-
-        }
-
-        public void DecreaseFear()
-        {
-
+            Time.timeScale = 0;
+            Debug.Log("Player is Dead");
         }
 
         #endregion
@@ -89,16 +77,6 @@ namespace Mikabrytu.LD46
 
 
         #region Zones
-
-        public void InsideFearZone()
-        {
-
-        }
-
-        public void OutsideFearZone()
-        {
-
-        }
 
         public void InsideCaptureZone()
         {
