@@ -4,6 +4,8 @@ using Mikabrytu.LD46.Systems;
 
 public class PlayerComponent : MonoBehaviour, IPlayer
 {
+    [SerializeField] private float speed;
+
     private IMove moveSystem;
     private IHealth healthSystem;
 
@@ -11,5 +13,12 @@ public class PlayerComponent : MonoBehaviour, IPlayer
     {
         moveSystem = new InputMovementSystem();
         healthSystem = new HealthSystem();
+
+        moveSystem.Setup(speed);
+    }
+
+    private void Update()
+    {
+        moveSystem.Move(transform);
     }
 }
