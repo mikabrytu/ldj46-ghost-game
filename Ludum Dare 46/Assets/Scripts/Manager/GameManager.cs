@@ -1,11 +1,16 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System;
 using UnityEngine;
+using Mikabrytu.LD46.Components;
+using Mikabrytu.LD46.Events;
 
 namespace Mikabrytu.LD46
 {
     public class GameManager : Singleton<GameManager>
     {
+        [SerializeField] private IPlayer player;
+        [SerializeField] private IGhost ghost;
+        [SerializeField] private IBrokenStuff brokenStuff;
+
         private UIManager uiManager;
 
         protected override void Awake()
