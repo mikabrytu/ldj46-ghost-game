@@ -3,11 +3,13 @@ using Mikabrytu.LD46.Components;
 using Mikabrytu.LD46.Systems;
 using Mikabrytu.LD46.Events;
 using System.Collections.Generic;
+using UnityEngine.AI;
 
 public class GhostComponent : MonoBehaviour, IGhost
 {
     [SerializeField] private Renderer renderer;
     [SerializeField] private Transform model;
+    [SerializeField] private List<Transform> targets;
     [SerializeField] private float speed;
     [SerializeField] private float raycastLimit = .5f;
 
@@ -15,10 +17,13 @@ public class GhostComponent : MonoBehaviour, IGhost
     private IInvisibility invisibilitySystem;
     private ISpawn spawnSystem;
 
+    private NavMeshAgent navMesh;
     private bool canMove;
 
     private void Start()
     {
+        navMesh = GetComponent<NavMeshAgent>();
+
         moveSystem = new AIMovementSystem();
         invisibilitySystem = new InvisibilitySystem();
         spawnSystem = new SpawnSystem();
@@ -31,18 +36,14 @@ public class GhostComponent : MonoBehaviour, IGhost
 
     private void Update()
     {
-        if (canMove)
-            moveSystem.Move(transform, model);
+        if (canMove && navMesh.remainingDistance == 0)
+        {
+            SetDestination();
+        }
     }
 
     private void OnTriggerEnter(Collider collider)
     {
-        if (collider.gameObject.tag == "Wall")
-        {
-            moveSystem.TriggerMovement(transform);
-            return;
-        }
-
         if (collider.gameObject.tag == "Player")
         {
             invisibilitySystem.Show(renderer);
@@ -60,10 +61,19 @@ public class GhostComponent : MonoBehaviour, IGhost
     {
         gameObject.SetActive(enable);
         canMove = enable;
+
+        if (enable)
+            SetDestination();
     }
 
     public void StopMovement()
     {
         canMove = false;
+    }
+
+    private void SetDestination()
+    {
+        Debug.Log("Setting destination");
+        navMesh.SetDestination(targets[Random.Range(0, targets.Count)].position);
     }
 }
