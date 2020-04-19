@@ -51,7 +51,7 @@ public class PlayerComponent : MonoBehaviour, IPlayer
     {
         transform.position = initialPosition.position;
         canMove = true;
-        healthSystem.Reset();
+        healthSystem?.Reset();
     }
 
     public int GetHeartBPM()
