@@ -64,7 +64,7 @@ namespace Mikabrytu.LD46
         {
             player.SetInitialPosition();
             SpawnBrokenStuff();
-            //SpawnGhost();
+            SpawnGhost();
         }
 
         private void OnPlayerFixed(PlayerFixedStuffEvent e)
