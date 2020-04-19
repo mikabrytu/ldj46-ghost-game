@@ -34,7 +34,7 @@ public class GhostComponent : MonoBehaviour, IGhost
     private void Update()
     {
         if (canMove)
-            moveSystem.Move(transform);
+            moveSystem.Move(transform, null);
     }
 
     private void OnTriggerEnter(Collider collider)

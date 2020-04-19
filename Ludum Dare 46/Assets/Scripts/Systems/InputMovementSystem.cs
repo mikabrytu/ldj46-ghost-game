@@ -12,25 +12,29 @@ namespace Mikabrytu.LD46.Systems
             this.speed = speed;
         }
 
-        public void Move(Transform transform)
+        public void Move(Transform origin, Transform model)
         {
             if (Input.GetKey(KeyCode.D))
             {
-                transform.Translate(Vector3.forward * speed * Time.deltaTime);
+                origin.Translate(Vector3.left * speed * Time.deltaTime);
+                model.rotation = Quaternion.Slerp(model.rotation, Quaternion.LookRotation(Vector3.left), speed * Time.deltaTime);
             }
 
             if (Input.GetKey(KeyCode.A))
             {
-                transform.Translate(Vector3.back * speed * Time.deltaTime);
+                origin.Translate(Vector3.right * speed * Time.deltaTime);
+                model.rotation = Quaternion.Slerp(model.rotation, Quaternion.LookRotation(Vector3.right), speed * Time.deltaTime);
             }
 
             if (Input.GetKey(KeyCode.W))
             {
-                transform.Translate(Vector3.left * speed * Time.deltaTime);
+                origin.Translate(Vector3.back * speed * Time.deltaTime);
+                model.rotation = Quaternion.Slerp(model.rotation, Quaternion.LookRotation(Vector3.back), speed * Time.deltaTime);
             }
             if (Input.GetKey(KeyCode.S))
             {
-                transform.Translate(Vector3.right * speed * Time.deltaTime);
+                origin.Translate(Vector3.forward * speed * Time.deltaTime);
+                model.rotation = Quaternion.Slerp(model.rotation, Quaternion.LookRotation(Vector3.forward), speed * Time.deltaTime);
             }
         }
 

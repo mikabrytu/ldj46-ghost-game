@@ -5,6 +5,7 @@ using Mikabrytu.LD46.Events;
 
 public class PlayerComponent : MonoBehaviour, IPlayer
 {
+    [SerializeField] private Transform model;
     [SerializeField] private Transform initialPosition;
     [SerializeField] private float speed;
     [SerializeField] private int heartAttack = 200;
@@ -27,7 +28,7 @@ public class PlayerComponent : MonoBehaviour, IPlayer
     private void Update()
     {
         if (canMove)
-            moveSystem.Move(transform);
+            moveSystem.Move(transform, model);
 
         Debug.Log($"Player heart BPM: {GetHeartBPM()}");
 

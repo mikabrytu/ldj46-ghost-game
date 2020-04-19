@@ -21,9 +21,9 @@ namespace Mikabrytu.LD46.Systems
             moveDirection = direction;
         }
 
-        public void Move(Transform transform)
+        public void Move(Transform origin, Transform model)
         {
-            transform.Translate(moveDirection * speed * Time.deltaTime);
+            origin.Translate(moveDirection * speed * Time.deltaTime);
         }
 
         public void TriggerMovement(Transform transform)
