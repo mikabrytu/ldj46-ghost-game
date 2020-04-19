@@ -15,6 +15,11 @@ namespace Mikabrytu.LD46.Systems
             currentBPM = heartAttackLimit / 2;
         }
 
+        public void Reset()
+        {
+            currentBPM = heartAttackLimit / 2;
+        }
+
         public void IncreaseBPM()
         {
             currentBPM += pulse;

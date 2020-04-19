@@ -13,6 +13,8 @@ public class GhostComponent : MonoBehaviour, IGhost
     private IInvisibility invisibilitySystem;
     private ISpawn spawnSystem;
 
+    private bool canMove;
+
     private Renderer renderer;
 
     private void Start()
@@ -31,7 +33,8 @@ public class GhostComponent : MonoBehaviour, IGhost
 
     private void Update()
     {
-        moveSystem.Move(transform);
+        if (canMove)
+            moveSystem.Move(transform);
     }
 
     private void OnTriggerEnter(Collider collider)
@@ -48,5 +51,21 @@ public class GhostComponent : MonoBehaviour, IGhost
             EventManager.Raise(new PlayerIsDeadEvent());
             return;
         }
+    }
+
+    private void OnEnable()
+    {
+        invisibilitySystem?.Hide(renderer);
+    }
+
+    public void Enable(bool enable)
+    {
+        gameObject.SetActive(enable);
+        canMove = enable;
+    }
+
+    public void StopMovement()
+    {
+        canMove = false;
     }
 }

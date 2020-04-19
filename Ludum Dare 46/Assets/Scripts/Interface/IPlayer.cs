@@ -2,6 +2,8 @@
 {
     public interface IPlayer
     {
+        void SetInitialPosition();
+        void StopMovement();
         int GetHeartBPM();
     }
 }

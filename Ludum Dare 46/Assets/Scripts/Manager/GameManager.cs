@@ -17,6 +17,7 @@ namespace Mikabrytu.LD46
 
         private IEnumerator breakRoutine;
         private UIManager uiManager;
+        private List<GameObject> brokenStuffInstances;
         private int brokenStuffCount;
         private int brokenStuffIndex;
 
@@ -32,23 +33,26 @@ namespace Mikabrytu.LD46
             EventManager.AddListener<PlayerIsDeadEvent>(GameOver);
             EventManager.AddListener<PlayerFixedStuffEvent>(OnPlayerFixed);
 
-            CallGame();
+            brokenStuffInstances = new List<GameObject>();
+
+            CallMenu();
         }
 
         #region Game States
 
-        private void CallMenu()
+        public void CallMenu()
         {
-
+            uiManager.ShowMenu();
         }
 
-        private void CallTutorial()
+        public void CallTutorial()
         {
-
+            uiManager.ShowTutorial();
         }
 
-        private void CallGame()
+        public void CallGame()
         {
+            uiManager.ShowGame();
             StartGame();
         }
 
@@ -57,13 +61,14 @@ namespace Mikabrytu.LD46
 
         #region Game Lifecycle
 
-        public void StartGame()
+        private void StartGame()
         {
+            player.SetInitialPosition();
             SpawnBrokenStuff();
             SpawnGhost();
         }
 
-        public void OnPlayerFixed(PlayerFixedStuffEvent e)
+        private void OnPlayerFixed(PlayerFixedStuffEvent e)
         {
             brokenStuffCount--;
             if (brokenStuffCount < 0)
@@ -75,10 +80,20 @@ namespace Mikabrytu.LD46
             SpawnBrokenStuff();
         }
 
-        public void GameOver(PlayerIsDeadEvent e)
+        private void GameOver(PlayerIsDeadEvent e)
         {
-            Time.timeScale = 0;
             Debug.Log("Player is Dead");
+
+            player.StopMovement();
+            ghost.StopMovement();
+
+            StartCoroutine(PlayGhostCutscene());
+
+            foreach (GameObject item in brokenStuffInstances)
+                Destroy(item);
+            brokenStuffInstances.Clear();
+            brokenStuffCount = 0;
+            brokenStuffIndex = 0;
         }
 
         #endregion
@@ -86,20 +101,20 @@ namespace Mikabrytu.LD46
 
         #region Spawn
 
-        public void SpawnGhost()
+        private void SpawnGhost()
         {
-
+            ghost.Enable(true);
         }
 
-        public void SpawnBrokenStuff()
+        private void SpawnBrokenStuff()
         {
             if (brokenStuffCount > (brokenStuffPrefabs.Count - 1))
                 return;
 
-            Instantiate(
+            brokenStuffInstances.Add(Instantiate(
                 brokenStuffPrefabs[brokenStuffIndex],
                 brokenStuffSpawnPoints[UnityEngine.Random.Range(0, brokenStuffSpawnPoints.Count)].position,
-                Quaternion.identity);
+                Quaternion.identity));
 
             brokenStuffCount++;
 
@@ -119,6 +134,14 @@ namespace Mikabrytu.LD46
             yield return new WaitForSeconds(breakStuffTime);
 
             SpawnBrokenStuff();
+        }
+
+        public IEnumerator PlayGhostCutscene()
+        {
+            yield return new WaitForSeconds(3f);
+
+            ghost.Enable(false);
+            uiManager.ShowRetry();
         }
 
     }

@@ -5,6 +5,7 @@ using Mikabrytu.LD46.Events;
 
 public class PlayerComponent : MonoBehaviour, IPlayer
 {
+    [SerializeField] private Transform initialPosition;
     [SerializeField] private float speed;
     [SerializeField] private int heartAttack = 200;
     [SerializeField] private int fearPulse = 25;
@@ -12,19 +13,21 @@ public class PlayerComponent : MonoBehaviour, IPlayer
     private IMove moveSystem;
     private IHealth healthSystem;
 
+    private bool canMove;
+
     private void Start()
     {
         moveSystem = new InputMovementSystem();
         healthSystem = new HealthSystem();
 
         moveSystem.Setup(speed, 0);
-
         healthSystem.Setup(heartAttack, fearPulse);
     }
 
     private void Update()
     {
-        moveSystem.Move(transform);
+        if (canMove)
+            moveSystem.Move(transform);
 
         Debug.Log($"Player heart BPM: {GetHeartBPM()}");
 
@@ -44,8 +47,20 @@ public class PlayerComponent : MonoBehaviour, IPlayer
             healthSystem.DecreaseBPM();
     }
 
+    public void SetInitialPosition()
+    {
+        transform.position = initialPosition.position;
+        canMove = true;
+        healthSystem.Reset();
+    }
+
     public int GetHeartBPM()
     {
         return healthSystem.GetBPM();
+    }
+
+    public void StopMovement()
+    {
+        canMove = false;
     }
 }
