@@ -11,7 +11,7 @@ namespace Mikabrytu.LD46
     {
         [SerializeField] private IPlayer player;
         [SerializeField] private IGhost ghost;
-        [SerializeField] private List<GameObject> brokenStuffPrefabs;
+        [SerializeField] private GameObject brokenStuffPrefab;
         [SerializeField] private List<Transform> brokenStuffSpawnPoints;
         [SerializeField] private float breakStuffTime = 10f;
 
@@ -19,7 +19,6 @@ namespace Mikabrytu.LD46
         private UIManager uiManager;
         private List<GameObject> brokenStuffInstances;
         private int brokenStuffCount;
-        private int brokenStuffIndex;
 
         protected override void Awake()
         {
@@ -64,8 +63,8 @@ namespace Mikabrytu.LD46
         private void StartGame()
         {
             player.SetInitialPosition();
-            //SpawnBrokenStuff();
-            SpawnGhost();
+            SpawnBrokenStuff();
+            //SpawnGhost();
         }
 
         private void OnPlayerFixed(PlayerFixedStuffEvent e)
@@ -93,7 +92,6 @@ namespace Mikabrytu.LD46
                 Destroy(item);
             brokenStuffInstances.Clear();
             brokenStuffCount = 0;
-            brokenStuffIndex = 0;
         }
 
         #endregion
@@ -108,20 +106,15 @@ namespace Mikabrytu.LD46
 
         private void SpawnBrokenStuff()
         {
-            if (brokenStuffCount > (brokenStuffPrefabs.Count - 1))
+            if (brokenStuffCount >= 4)
                 return;
 
             brokenStuffInstances.Add(Instantiate(
-                brokenStuffPrefabs[brokenStuffIndex],
+                brokenStuffPrefab,
                 brokenStuffSpawnPoints[UnityEngine.Random.Range(0, brokenStuffSpawnPoints.Count)].position,
                 Quaternion.identity));
 
             brokenStuffCount++;
-
-            if (brokenStuffIndex >= (brokenStuffPrefabs.Count - 1))
-                brokenStuffIndex = 0;
-            else
-                brokenStuffIndex++;
 
             breakRoutine = BreakStuffTimer();
             StartCoroutine(breakRoutine);
