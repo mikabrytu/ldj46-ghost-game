@@ -6,6 +6,8 @@ using System.Collections.Generic;
 
 public class GhostComponent : MonoBehaviour, IGhost
 {
+    [SerializeField] private Renderer renderer;
+    [SerializeField] private Transform model;
     [SerializeField] private float speed;
     [SerializeField] private float raycastLimit = .5f;
 
@@ -15,18 +17,14 @@ public class GhostComponent : MonoBehaviour, IGhost
 
     private bool canMove;
 
-    private Renderer renderer;
-
     private void Start()
     {
-        renderer = GetComponent<Renderer>();
-
         moveSystem = new AIMovementSystem();
         invisibilitySystem = new InvisibilitySystem();
         spawnSystem = new SpawnSystem();
 
         moveSystem.Setup(speed, raycastLimit);
-        moveSystem.Setup(Vector3.forward);
+        moveSystem.TriggerMovement(transform);
 
         invisibilitySystem.Hide(renderer);
     }
@@ -34,7 +32,7 @@ public class GhostComponent : MonoBehaviour, IGhost
     private void Update()
     {
         if (canMove)
-            moveSystem.Move(transform, null);
+            moveSystem.Move(transform, model);
     }
 
     private void OnTriggerEnter(Collider collider)

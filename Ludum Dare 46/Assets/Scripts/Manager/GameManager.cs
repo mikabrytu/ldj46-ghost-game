@@ -64,7 +64,7 @@ namespace Mikabrytu.LD46
         private void StartGame()
         {
             player.SetInitialPosition();
-            SpawnBrokenStuff();
+            //SpawnBrokenStuff();
             SpawnGhost();
         }
 

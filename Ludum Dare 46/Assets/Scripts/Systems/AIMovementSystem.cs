@@ -24,6 +24,7 @@ namespace Mikabrytu.LD46.Systems
         public void Move(Transform origin, Transform model)
         {
             origin.Translate(moveDirection * speed * Time.deltaTime);
+            model.rotation = Quaternion.Slerp(model.rotation, Quaternion.LookRotation(moveDirection), speed * Time.deltaTime);
         }
 
         public void TriggerMovement(Transform transform)
