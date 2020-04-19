@@ -3,7 +3,47 @@ guid: c5d4942b49bf84bbb8dc9310b9a3d70f
 ModelImporter:
   serializedVersion: 19300
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: banheiro piso 1
+    second: {fileID: 2100000, guid: 653935699b2bf4994963c6566711dfe7, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: banheiro piso 2
+    second: {fileID: 2100000, guid: b8e617ec5fa214aa0a5d8355db9557ca, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: bide
+    second: {fileID: 2100000, guid: 744c54c87563a4d18b26ad051b9fbbbc, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: chao madeira
+    second: {fileID: 2100000, guid: 7cdf54d63260f41d7b5711e397702bdf, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: cobertor
+    second: {fileID: 2100000, guid: 7179d3b1234254303b4b2d7cb4df043a, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: poltrona
+    second: {fileID: 2100000, guid: 9b0f28c0faa1a42119b4f63feee77b66, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: sala jantar
+    second: {fileID: 2100000, guid: a68228c24abfa2f4b8954d7b0148f799, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: wood
+    second: {fileID: 2100000, guid: ba5efd3e3e23940b9853855560cb8a50, type: 2}
   materials:
     materialImportMode: 1
     materialName: 0
