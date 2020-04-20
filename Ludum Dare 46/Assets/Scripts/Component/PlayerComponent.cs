@@ -2,6 +2,7 @@
 using Mikabrytu.LD46.Components;
 using Mikabrytu.LD46.Systems;
 using Mikabrytu.LD46.Events;
+using System.Collections;
 
 public class PlayerComponent : MonoBehaviour, IPlayer
 {
@@ -10,11 +11,12 @@ public class PlayerComponent : MonoBehaviour, IPlayer
     [SerializeField] private float speed;
     [SerializeField] private float heartAttack = 200;
     [SerializeField] private float fearPulse = 25;
+    [SerializeField] private float fearTimer = 3f;
     [SerializeField] private float rate = 2;
 
     private IMove moveSystem;
     private IHealth healthSystem;
-
+    private IEnumerator fearRoutine;
     private bool canMove;
 
     private void Start()
@@ -33,8 +35,6 @@ public class PlayerComponent : MonoBehaviour, IPlayer
         if (canMove)
             moveSystem.Move(transform, model);
 
-        Debug.Log($"Player heart BPM: {GetHeartBPM()}");
-
         if (healthSystem.isDead())
             EventManager.Raise(new PlayerIsDeadEvent());
     }
@@ -42,13 +42,28 @@ public class PlayerComponent : MonoBehaviour, IPlayer
     private void OnTriggerEnter(Collider collider)
     {
         if (collider.tag == "Ghost")
-            healthSystem.IncreaseBPM();
+        {
+            if (fearRoutine != null)
+                return;
+
+            fearRoutine = IncreaseFear();
+            StartCoroutine(fearRoutine);
+        }
     }
 
     private void OnTriggerExit(Collider collider)
     {
         if (collider.tag == "Ghost")
+        {
+            if (fearRoutine == null)
+                return;
+
+            if (fearRoutine != null)
+                StopCoroutine(fearRoutine);
+            fearRoutine = null;
+
             healthSystem.DecreaseBPM();
+        }
     }
 
     public void SetInitialPosition()
@@ -66,5 +81,14 @@ public class PlayerComponent : MonoBehaviour, IPlayer
     public void StopMovement()
     {
         canMove = false;
+    }
+
+    public IEnumerator IncreaseFear()
+    {
+        while (true)
+        {
+            healthSystem.IncreaseBPM();
+            yield return new WaitForSeconds(fearTimer);
+        }
     }
 }
