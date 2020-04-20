@@ -21,11 +21,7 @@ namespace Mikabrytu.LD46
         private void Start()
         {
             ShowWarning(false, Vector2.zero);
-
-            messageChair.SetActive(false);
-            messageBed.SetActive(false);
-            messagePlumbing.SetActive(false);
-            messageWindow.SetActive(false);
+            ResetMessages();
         }
 
         public void ShowMenu()
@@ -95,6 +91,14 @@ namespace Mikabrytu.LD46
                     messageWindow.SetActive(show);
                     break;
             }
+        }
+
+        public void ResetMessages()
+        {
+            messageChair.SetActive(false);
+            messageBed.SetActive(false);
+            messagePlumbing.SetActive(false);
+            messageWindow.SetActive(false);
         }
     }
 }

@@ -9,9 +9,11 @@ using System;
 public class BrokenStuffComponent : MonoBehaviour, IBrokenStuff
 {
     [SerializeField] private BrokenStuffTypes type;
+    [SerializeField] private ParticleSystem fixEffectPrefab;
     [SerializeField] private float fixTime;
 
     private IFix fixSystem;
+    private ParticleSystem fixEffect;
 
     private void Start()
     {
@@ -19,12 +21,16 @@ public class BrokenStuffComponent : MonoBehaviour, IBrokenStuff
 
         fixSystem = new FixSystem();
         fixSystem.Setup(fixTime);
+
+        fixEffect = Instantiate(fixEffectPrefab, transform.position, Quaternion.identity);
+        fixEffect.Stop();
     }
 
     private void OnTriggerEnter(Collider collider)
     {
         if (collider.tag == "Player")
         {
+            fixEffect.Play();
             fixSystem.StartFix(OnFixFinish);
         }
     }
@@ -33,12 +39,14 @@ public class BrokenStuffComponent : MonoBehaviour, IBrokenStuff
     {
         if (collider.tag == "Player")
         {
+            fixEffect.Stop();
             fixSystem.CancelFix();
         }
     }
 
     private void OnFixFinish()
     {
+        fixEffect.Stop();
         Debug.Log("Fix Finished");
         EventManager.Raise(new PlayerFixedStuffEvent(type));
         Enable(false);

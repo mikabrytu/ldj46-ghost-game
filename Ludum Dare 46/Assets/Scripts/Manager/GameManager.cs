@@ -32,13 +32,6 @@ namespace Mikabrytu.LD46
         {
             uiManager = GetComponent<UIManager>();
 
-            availableTypes = new List<BrokenStuffTypes>() {
-                BrokenStuffTypes.Chair,
-                BrokenStuffTypes.Bed,
-                BrokenStuffTypes.Plumbing,
-                BrokenStuffTypes.Window
-            };
-
             EventManager.AddListener<PlayerIsDeadEvent>(GameOver);
             EventManager.AddListener<PlayerFixedStuffEvent>(OnPlayerFixed);
             EventManager.AddListener<PlayerReachBrokenStuffEvent>(OnPlayerSeeBrokenStuff);
@@ -78,6 +71,7 @@ namespace Mikabrytu.LD46
         private void StartGame()
         {
             player.SetInitialPosition();
+            ResetAvailableTypes();
             SpawnBrokenStuff();
             SpawnGhost();
         }
@@ -108,6 +102,20 @@ namespace Mikabrytu.LD46
         {
             player.StopMovement();
             ghost.StopMovement();
+
+            foreach (IBrokenStuff item in chairs)
+                item.Enable(false);
+
+            foreach (IBrokenStuff item in beds)
+                item.Enable(false);
+
+            foreach (IBrokenStuff item in plumbings)
+                item.Enable(false);
+
+            foreach (IBrokenStuff item in windows)
+                item.Enable(false);
+
+            uiManager.ResetMessages();
 
             StartCoroutine(PlayGhostCutscene());
         }
@@ -168,6 +176,16 @@ namespace Mikabrytu.LD46
 
             ghost.Enable(false);
             uiManager.ShowRetry();
+        }
+
+        private void ResetAvailableTypes()
+        {
+            availableTypes = new List<BrokenStuffTypes>() {
+                BrokenStuffTypes.Chair,
+                BrokenStuffTypes.Bed,
+                BrokenStuffTypes.Plumbing,
+                BrokenStuffTypes.Window
+            };
         }
 
     }
