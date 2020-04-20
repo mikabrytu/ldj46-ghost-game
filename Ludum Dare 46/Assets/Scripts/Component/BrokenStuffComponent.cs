@@ -3,23 +3,19 @@ using Mikabrytu.LD46.Components;
 using Mikabrytu.LD46.Systems;
 using Mikabrytu.LD46.Events;
 using System.Collections;
+using System;
 
 public class BrokenStuffComponent : MonoBehaviour, IBrokenStuff
 {
-    [SerializeField] private Light pointLight;
     [SerializeField] private float fixTime;
 
-    private IBright brightSystem;
     private IFix fixSystem;
-    private ISpawn spawnSystem;
 
     private void Start()
     {
-        brightSystem = new BrightSystem();
-        fixSystem = new FixSystem();
-        spawnSystem = new SpawnSystem();
+        EventManager.AddListener<BrokenStuffTriggerEvent>(OnBrokenStuffTriggerEnter);
 
-        brightSystem.TurnOff(pointLight);
+        fixSystem = new FixSystem();
         fixSystem.Setup(fixTime);
     }
 
@@ -27,7 +23,6 @@ public class BrokenStuffComponent : MonoBehaviour, IBrokenStuff
     {
         if (collider.tag == "Player")
         {
-            brightSystem.TurnOn(pointLight);
             fixSystem.StartFix(OnFixFinish);
         }
     }
@@ -36,7 +31,6 @@ public class BrokenStuffComponent : MonoBehaviour, IBrokenStuff
     {
         if (collider.tag == "Player")
         {
-            brightSystem.TurnOff(pointLight);
             fixSystem.CancelFix();
         }
     }
@@ -45,6 +39,16 @@ public class BrokenStuffComponent : MonoBehaviour, IBrokenStuff
     {
         Debug.Log("Fix Finished");
         EventManager.Raise(new PlayerFixedStuffEvent());
-        Destroy(gameObject);
+    }
+
+    private void OnBrokenStuffTriggerEnter(BrokenStuffTriggerEvent e)
+    {
+        if (e.isEnter)
+        {
+            Vector3 screenPosition = Camera.main.WorldToScreenPoint(transform.position);
+            EventManager.Raise(new PlayerReachBrokenStuffEvent(screenPosition));
+        }
+        else
+            EventManager.Raise(new PlayerLeavingBrokenStuffEvent());
     }
 }

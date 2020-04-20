@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using TMPro;
 
 namespace Mikabrytu.LD46
@@ -9,6 +10,7 @@ namespace Mikabrytu.LD46
     {
         [SerializeField] private GameObject menuCanvas, tutorialCanvas, gameCanvas, retryCanvas;
         [SerializeField] private TextMeshProUGUI playerBPM;
+        [SerializeField] private GameObject warningIcon;
 
         protected override void Awake()
         {
@@ -17,7 +19,7 @@ namespace Mikabrytu.LD46
 
         private void Start()
         {
-            
+            HideWarning();
         }
 
         public void ShowMenu()
@@ -60,6 +62,17 @@ namespace Mikabrytu.LD46
         public void UpdatePlayerBPM(int bpm)
         {
             playerBPM.text = bpm.ToString();
+        }
+
+        public void ShowWarning(Vector2 position)
+        {
+            warningIcon.transform.position = position;
+            warningIcon.SetActive(true);
+        }
+
+        public void HideWarning()
+        {
+            warningIcon.SetActive(false);
         }
     }
 }

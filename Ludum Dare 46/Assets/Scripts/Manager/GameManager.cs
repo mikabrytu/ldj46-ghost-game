@@ -11,14 +11,10 @@ namespace Mikabrytu.LD46
     {
         [SerializeField] private IPlayer player;
         [SerializeField] private IGhost ghost;
-        [SerializeField] private GameObject brokenStuffPrefab;
-        [SerializeField] private List<Transform> brokenStuffSpawnPoints;
         [SerializeField] private float breakStuffTime = 10f;
 
         private IEnumerator breakRoutine;
         private UIManager uiManager;
-        private List<GameObject> brokenStuffInstances;
-        private int brokenStuffCount;
 
         protected override void Awake()
         {
@@ -31,8 +27,8 @@ namespace Mikabrytu.LD46
 
             EventManager.AddListener<PlayerIsDeadEvent>(GameOver);
             EventManager.AddListener<PlayerFixedStuffEvent>(OnPlayerFixed);
-
-            brokenStuffInstances = new List<GameObject>();
+            EventManager.AddListener<PlayerReachBrokenStuffEvent>(OnPlayerSeeBrokenStuff);
+            EventManager.AddListener<PlayerLeavingBrokenStuffEvent>(OnPlayerLeaveBrokenStuff);
 
             CallMenu();
         }
@@ -69,19 +65,27 @@ namespace Mikabrytu.LD46
         {
             player.SetInitialPosition();
             SpawnBrokenStuff();
-            //SpawnGhost();
+            SpawnGhost();
         }
 
         private void OnPlayerFixed(PlayerFixedStuffEvent e)
         {
-            brokenStuffCount--;
-            if (brokenStuffCount < 0)
-                brokenStuffCount = 0;
+            uiManager.HideWarning();
 
             if (breakRoutine != null)
                 StopCoroutine(breakRoutine);
 
             SpawnBrokenStuff();
+        }
+
+        private void OnPlayerSeeBrokenStuff(PlayerReachBrokenStuffEvent e)
+        {
+            uiManager.ShowWarning(e.position);
+        }
+
+        private void OnPlayerLeaveBrokenStuff(PlayerLeavingBrokenStuffEvent e)
+        {
+            uiManager.HideWarning();
         }
 
         private void GameOver(PlayerIsDeadEvent e)
@@ -92,11 +96,6 @@ namespace Mikabrytu.LD46
             ghost.StopMovement();
 
             StartCoroutine(PlayGhostCutscene());
-
-            foreach (GameObject item in brokenStuffInstances)
-                Destroy(item);
-            brokenStuffInstances.Clear();
-            brokenStuffCount = 0;
         }
 
         #endregion
@@ -111,15 +110,6 @@ namespace Mikabrytu.LD46
 
         private void SpawnBrokenStuff()
         {
-            if (brokenStuffCount >= 4)
-                return;
-
-            brokenStuffInstances.Add(Instantiate(
-                brokenStuffPrefab,
-                brokenStuffSpawnPoints[UnityEngine.Random.Range(0, brokenStuffSpawnPoints.Count)].position,
-                Quaternion.identity));
-
-            brokenStuffCount++;
 
             breakRoutine = BreakStuffTimer();
             StartCoroutine(breakRoutine);
