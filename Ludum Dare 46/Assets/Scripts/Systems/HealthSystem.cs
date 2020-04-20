@@ -1,38 +1,52 @@
 ﻿using Mikabrytu.LD46.Systems;
+using UnityEngine;
 
 namespace Mikabrytu.LD46.Systems
 {
     public class HealthSystem : IHealth
     {
-        private int currentBPM;
-        private int heartAttackLimit;
-        private int pulse;
+        private float heartAttackLimit;
+        private float currentBPM;
+        private float nextBPMLevel;
+        private float pulse;
+        private float rate;
 
-        public void Setup(int heartAttackLimit, int pulse)
+        public void Setup(float heartAttackLimit, float pulse, float rate)
         {
             this.heartAttackLimit = heartAttackLimit;
             this.pulse = pulse;
+            this.rate = rate;
             currentBPM = heartAttackLimit / 2;
         }
 
         public void Reset()
         {
             currentBPM = heartAttackLimit / 2;
+            nextBPMLevel = currentBPM;
+        }
+
+        public void Update()
+        {
+            if (currentBPM < nextBPMLevel)
+                currentBPM += rate * Time.deltaTime;
+
+            if (currentBPM > nextBPMLevel)
+                currentBPM -= rate * Time.deltaTime;
         }
 
         public void IncreaseBPM()
         {
-            currentBPM += pulse;
+            nextBPMLevel = currentBPM + pulse;
         }
 
         public void DecreaseBPM()
         {
-            currentBPM -= pulse;
+            nextBPMLevel = currentBPM - pulse;
         }
 
         public int GetBPM()
         {
-            return currentBPM;
+            return (int) currentBPM;
         }
 
         public bool isDead()

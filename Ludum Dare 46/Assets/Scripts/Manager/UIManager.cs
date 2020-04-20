@@ -1,12 +1,14 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 namespace Mikabrytu.LD46
 {
     public class UIManager : Singleton<UIManager>
     {
         [SerializeField] private GameObject menuCanvas, tutorialCanvas, gameCanvas, retryCanvas;
+        [SerializeField] private TextMeshProUGUI playerBPM;
 
         protected override void Awake()
         {
@@ -53,6 +55,11 @@ namespace Mikabrytu.LD46
         public void ShowIntroText()
         {
 
+        }
+
+        public void UpdatePlayerBPM(int bpm)
+        {
+            playerBPM.text = bpm.ToString();
         }
     }
 }

@@ -2,8 +2,9 @@
 {
     public interface IHealth
     {
-        void Setup(int heartAttackLimit, int pulse);
+        void Setup(float heartAttackLimit, float pulse, float rate);
         void Reset();
+        void Update();
         void IncreaseBPM();
         void DecreaseBPM();
         int GetBPM();

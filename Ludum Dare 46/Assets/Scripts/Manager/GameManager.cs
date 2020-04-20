@@ -37,6 +37,11 @@ namespace Mikabrytu.LD46
             CallMenu();
         }
 
+        private void Update()
+        {
+            uiManager.UpdatePlayerBPM(player.GetHeartBPM());
+        }
+
         #region Game States
 
         public void CallMenu()
@@ -64,7 +69,7 @@ namespace Mikabrytu.LD46
         {
             player.SetInitialPosition();
             SpawnBrokenStuff();
-            SpawnGhost();
+            //SpawnGhost();
         }
 
         private void OnPlayerFixed(PlayerFixedStuffEvent e)

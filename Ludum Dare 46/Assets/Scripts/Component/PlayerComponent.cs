@@ -8,8 +8,9 @@ public class PlayerComponent : MonoBehaviour, IPlayer
     [SerializeField] private Transform model;
     [SerializeField] private Transform initialPosition;
     [SerializeField] private float speed;
-    [SerializeField] private int heartAttack = 200;
-    [SerializeField] private int fearPulse = 25;
+    [SerializeField] private float heartAttack = 200;
+    [SerializeField] private float fearPulse = 25;
+    [SerializeField] private float rate = 2;
 
     private IMove moveSystem;
     private IHealth healthSystem;
@@ -22,11 +23,13 @@ public class PlayerComponent : MonoBehaviour, IPlayer
         healthSystem = new HealthSystem();
 
         moveSystem.Setup(speed, 0);
-        healthSystem.Setup(heartAttack, fearPulse);
+        healthSystem.Setup(heartAttack, fearPulse, rate);
     }
 
     private void Update()
     {
+        healthSystem.Update();
+
         if (canMove)
             moveSystem.Move(transform, model);
 
