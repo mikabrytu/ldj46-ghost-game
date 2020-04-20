@@ -32,6 +32,7 @@ public class BrokenStuffComponent : MonoBehaviour, IBrokenStuff
         {
             fixEffect.Play();
             fixSystem.StartFix(OnFixFinish);
+            AudioManager.Instance.PlayFix();
             EventManager.Raise(new PlayerFixingEvent(true));
         }
     }

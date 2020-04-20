@@ -3,6 +3,7 @@ using Mikabrytu.LD46.Components;
 using Mikabrytu.LD46.Systems;
 using Mikabrytu.LD46.Events;
 using System.Collections;
+using Mikabrytu.LD46;
 
 public class PlayerComponent : MonoBehaviour, IPlayer
 {
@@ -34,7 +35,11 @@ public class PlayerComponent : MonoBehaviour, IPlayer
         healthSystem.Update();
 
         if (canMove)
-            animator.SetBool("walking", moveSystem.Move(transform, model));
+        {
+            bool isMoving = moveSystem.Move(transform, model);
+            animator.SetBool("walking", isMoving);
+            AudioManager.Instance.PlayFootstep(isMoving);
+        }
 
         if (healthSystem.isDead())
             EventManager.Raise(new PlayerIsDeadEvent());
@@ -45,6 +50,7 @@ public class PlayerComponent : MonoBehaviour, IPlayer
         if (collider.tag == "Ghost")
         {
             animator.SetBool("blinking", true);
+            AudioManager.Instance.PlayWhisper();
 
             if (fearRoutine != null)
                 return;
@@ -87,6 +93,7 @@ public class PlayerComponent : MonoBehaviour, IPlayer
     public void StopMovement()
     {
         canMove = false;
+        animator.SetBool("walking", false);
     }
 
     public void SetFixing(bool isFixing)

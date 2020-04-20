@@ -4,6 +4,7 @@ using Mikabrytu.LD46.Systems;
 using Mikabrytu.LD46.Events;
 using System.Collections.Generic;
 using UnityEngine.AI;
+using Mikabrytu.LD46;
 
 public class GhostComponent : MonoBehaviour, IGhost
 {
@@ -46,6 +47,7 @@ public class GhostComponent : MonoBehaviour, IGhost
         if (collider.gameObject.tag == "Player")
         {
             invisibilitySystem.Show(true, model.gameObject);
+            AudioManager.Instance.PlayCaught();
             EventManager.Raise(new PlayerIsDeadEvent());
             return;
         }

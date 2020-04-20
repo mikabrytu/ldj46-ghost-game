@@ -22,6 +22,7 @@ namespace Mikabrytu.LD46
         private IEnumerator breakRoutine;
         private List<BrokenStuffTypes> availableTypes;
         private UIManager uiManager;
+        private AudioManager audioManager;
 
         protected override void Awake()
         {
@@ -31,6 +32,7 @@ namespace Mikabrytu.LD46
         private void Start()
         {
             uiManager = GetComponent<UIManager>();
+            audioManager = GetComponent<AudioManager>();
 
             EventManager.AddListener<PlayerIsDeadEvent>(GameOver);
             EventManager.AddListener<PlayerFixedStuffEvent>(OnPlayerFixed);
@@ -129,6 +131,7 @@ namespace Mikabrytu.LD46
                 item.Enable(false);
 
             uiManager.ResetMessages();
+            audioManager.PlayFootstep(false);
 
             StartCoroutine(PlayGhostCutscene());
         }
@@ -153,6 +156,7 @@ namespace Mikabrytu.LD46
             BrokenStuffTypes category = availableTypes[UnityEngine.Random.Range(0, availableTypes.Count)];
             availableTypes.Remove(category);
             uiManager.ShowMessage(true, category);
+            audioManager.PlayBroke();
 
             switch(category)
             {
@@ -185,7 +189,7 @@ namespace Mikabrytu.LD46
 
         public IEnumerator PlayGhostCutscene()
         {
-            yield return new WaitForSeconds(3f);
+            yield return new WaitForSeconds(2f);
 
             ghost.Enable(false);
             uiManager.ShowRetry();
