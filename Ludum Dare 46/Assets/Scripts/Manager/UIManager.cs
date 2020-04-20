@@ -1,13 +1,12 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.UI;
+﻿using UnityEngine;
 using TMPro;
+using Mikabrytu.LD46.View;
 
 namespace Mikabrytu.LD46
 {
     public class UIManager : Singleton<UIManager>
     {
+        [SerializeField] private IHeart heart;
         [SerializeField] private GameObject menuCanvas, tutorialCanvas, gameCanvas, retryCanvas;
         [SerializeField] private GameObject warningIcon;
         [SerializeField] private GameObject messageChair, messageBed, messagePlumbing, messageWindow;
@@ -56,11 +55,6 @@ namespace Mikabrytu.LD46
             retryCanvas.SetActive(true);
         }
 
-        public void ShowIntroText()
-        {
-
-        }
-
         public void UpdatePlayerBPM(int bpm)
         {
             playerBPM.text = bpm.ToString();
@@ -99,6 +93,14 @@ namespace Mikabrytu.LD46
             messageBed.SetActive(false);
             messagePlumbing.SetActive(false);
             messageWindow.SetActive(false);
+        }
+
+        public void ChangeHeartBeat(bool isIncreasing)
+        {
+            if (isIncreasing)
+                heart.IncreaseBPM();
+            else
+                heart.DecreaseBPM();
         }
     }
 }

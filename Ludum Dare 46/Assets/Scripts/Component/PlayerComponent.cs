@@ -68,6 +68,7 @@ public class PlayerComponent : MonoBehaviour, IPlayer
             fearRoutine = null;
 
             healthSystem.DecreaseBPM();
+            EventManager.Raise(new PlayerChangeBPMEvent(false));
         }
     }
 
@@ -98,6 +99,7 @@ public class PlayerComponent : MonoBehaviour, IPlayer
         while (true)
         {
             healthSystem.IncreaseBPM();
+            EventManager.Raise(new PlayerChangeBPMEvent(true));
             yield return new WaitForSeconds(fearTimer);
         }
     }

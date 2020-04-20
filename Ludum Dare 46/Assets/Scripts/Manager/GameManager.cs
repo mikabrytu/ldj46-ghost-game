@@ -37,8 +37,14 @@ namespace Mikabrytu.LD46
             EventManager.AddListener<PlayerReachBrokenStuffEvent>(OnPlayerSeeBrokenStuff);
             EventManager.AddListener<PlayerLeavingBrokenStuffEvent>(OnPlayerLeaveBrokenStuff);
             EventManager.AddListener<PlayerFixingEvent>(OnPlayerFixing);
+            EventManager.AddListener<PlayerChangeBPMEvent>(OnPLayerBPMChange);
 
             CallMenu();
+        }
+
+        private void OnPLayerBPMChange(PlayerChangeBPMEvent e)
+        {
+            uiManager.ChangeHeartBeat(e.isIncreasing);
         }
 
         private void Update()
