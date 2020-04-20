@@ -7,7 +7,6 @@ using UnityEngine.AI;
 
 public class GhostComponent : MonoBehaviour, IGhost
 {
-    [SerializeField] private Renderer renderer;
     [SerializeField] private Transform model;
     [SerializeField] private List<Transform> targets;
     [SerializeField] private float speed;
@@ -31,7 +30,7 @@ public class GhostComponent : MonoBehaviour, IGhost
         moveSystem.Setup(speed, raycastLimit);
         moveSystem.TriggerMovement(transform);
 
-        invisibilitySystem.Hide(renderer);
+        invisibilitySystem.Show(false, model.gameObject);
     }
 
     private void Update()
@@ -46,7 +45,7 @@ public class GhostComponent : MonoBehaviour, IGhost
     {
         if (collider.gameObject.tag == "Player")
         {
-            invisibilitySystem.Show(renderer);
+            invisibilitySystem.Show(true, model.gameObject);
             EventManager.Raise(new PlayerIsDeadEvent());
             return;
         }
@@ -54,7 +53,7 @@ public class GhostComponent : MonoBehaviour, IGhost
 
     private void OnEnable()
     {
-        invisibilitySystem?.Hide(renderer);
+        invisibilitySystem?.Show(false, model.gameObject);
     }
 
     public void Enable(bool enable)
