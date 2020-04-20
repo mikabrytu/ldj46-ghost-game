@@ -9,8 +9,9 @@ namespace Mikabrytu.LD46
     public class UIManager : Singleton<UIManager>
     {
         [SerializeField] private GameObject menuCanvas, tutorialCanvas, gameCanvas, retryCanvas;
-        [SerializeField] private TextMeshProUGUI playerBPM;
         [SerializeField] private GameObject warningIcon;
+        [SerializeField] private GameObject messageChair, messageBed, messagePlumbing, messageWindow;
+        [SerializeField] private TextMeshProUGUI playerBPM;
 
         protected override void Awake()
         {
@@ -19,7 +20,12 @@ namespace Mikabrytu.LD46
 
         private void Start()
         {
-            HideWarning();
+            ShowWarning(false, Vector2.zero);
+
+            messageChair.SetActive(false);
+            messageBed.SetActive(false);
+            messagePlumbing.SetActive(false);
+            messageWindow.SetActive(false);
         }
 
         public void ShowMenu()
@@ -64,15 +70,31 @@ namespace Mikabrytu.LD46
             playerBPM.text = bpm.ToString();
         }
 
-        public void ShowWarning(Vector2 position)
+        public void ShowWarning(bool show, Vector2 position)
         {
-            warningIcon.transform.position = position;
-            warningIcon.SetActive(true);
+            if (show)
+                warningIcon.transform.position = position;
+
+            warningIcon.SetActive(show);
         }
 
-        public void HideWarning()
+        public void ShowMessage(bool show, BrokenStuffTypes type)
         {
-            warningIcon.SetActive(false);
+            switch (type)
+            {
+                case BrokenStuffTypes.Chair:
+                    messageChair.SetActive(show);
+                    break;
+                case BrokenStuffTypes.Bed:
+                    messageBed.SetActive(show);
+                    break;
+                case BrokenStuffTypes.Plumbing:
+                    messagePlumbing.SetActive(show);
+                    break;
+                case BrokenStuffTypes.Window:
+                    messageWindow.SetActive(show);
+                    break;
+            }
         }
     }
 }

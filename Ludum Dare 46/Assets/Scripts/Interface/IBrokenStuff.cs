@@ -2,6 +2,6 @@
 {
     public interface IBrokenStuff
     {
-
+        void Enable(bool enable);
     }
 }

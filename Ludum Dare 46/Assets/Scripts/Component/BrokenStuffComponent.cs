@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using Mikabrytu.LD46;
 using Mikabrytu.LD46.Components;
 using Mikabrytu.LD46.Systems;
 using Mikabrytu.LD46.Events;
@@ -7,6 +8,7 @@ using System;
 
 public class BrokenStuffComponent : MonoBehaviour, IBrokenStuff
 {
+    [SerializeField] private BrokenStuffTypes type;
     [SerializeField] private float fixTime;
 
     private IFix fixSystem;
@@ -38,7 +40,8 @@ public class BrokenStuffComponent : MonoBehaviour, IBrokenStuff
     private void OnFixFinish()
     {
         Debug.Log("Fix Finished");
-        EventManager.Raise(new PlayerFixedStuffEvent());
+        EventManager.Raise(new PlayerFixedStuffEvent(type));
+        Enable(false);
     }
 
     private void OnBrokenStuffTriggerEnter(BrokenStuffTriggerEvent e)
@@ -50,5 +53,10 @@ public class BrokenStuffComponent : MonoBehaviour, IBrokenStuff
         }
         else
             EventManager.Raise(new PlayerLeavingBrokenStuffEvent());
+    }
+
+    public void Enable(bool enable)
+    {
+        gameObject.SetActive(enable);
     }
 }
