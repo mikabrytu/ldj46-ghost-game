@@ -6,6 +6,7 @@ using System.Collections;
 
 public class PlayerComponent : MonoBehaviour, IPlayer
 {
+    [SerializeField] private GameObject flashlight;
     [SerializeField] private Transform model;
     [SerializeField] private Transform initialPosition;
     [SerializeField] private float speed;
@@ -13,11 +14,14 @@ public class PlayerComponent : MonoBehaviour, IPlayer
     [SerializeField] private float fearPulse = 25;
     [SerializeField] private float fearTimer = 3f;
     [SerializeField] private float rate = 2;
+    [SerializeField] private float blinkRate = .5f;
 
     private IMove moveSystem;
     private IHealth healthSystem;
     private IEnumerator fearRoutine;
+    private float blinkTimer;
     private bool canMove;
+    private bool blink = false;
 
     private void Start()
     {
@@ -37,12 +41,29 @@ public class PlayerComponent : MonoBehaviour, IPlayer
 
         if (healthSystem.isDead())
             EventManager.Raise(new PlayerIsDeadEvent());
+
+        if (blink)
+        {
+            blinkTimer -= Time.deltaTime;
+
+            if (blinkTimer <= 0.0f)
+            {
+                flashlight.SetActive(!flashlight.active);
+            }
+        }
+        else
+        {
+            blinkTimer = blinkRate;
+            flashlight.SetActive(true);
+        }
     }
 
     private void OnTriggerEnter(Collider collider)
     {
         if (collider.tag == "Ghost")
         {
+            blink = true;
+
             if (fearRoutine != null)
                 return;
 
@@ -55,6 +76,8 @@ public class PlayerComponent : MonoBehaviour, IPlayer
     {
         if (collider.tag == "Ghost")
         {
+            blink = false;
+
             if (fearRoutine == null)
                 return;
 
