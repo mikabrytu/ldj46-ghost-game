@@ -32,6 +32,7 @@ public class BrokenStuffComponent : MonoBehaviour, IBrokenStuff
         {
             fixEffect.Play();
             fixSystem.StartFix(OnFixFinish);
+            EventManager.Raise(new PlayerFixingEvent(true));
         }
     }
 
@@ -41,6 +42,7 @@ public class BrokenStuffComponent : MonoBehaviour, IBrokenStuff
         {
             fixEffect.Stop();
             fixSystem.CancelFix();
+            EventManager.Raise(new PlayerFixingEvent(false));
         }
     }
 

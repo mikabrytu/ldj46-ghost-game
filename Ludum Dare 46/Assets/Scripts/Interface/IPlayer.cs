@@ -4,6 +4,7 @@
     {
         void SetInitialPosition();
         void StopMovement();
+        void SetFixing(bool isFixing);
         int GetHeartBPM();
     }
 }

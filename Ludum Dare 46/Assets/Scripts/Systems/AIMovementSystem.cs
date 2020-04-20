@@ -21,10 +21,11 @@ namespace Mikabrytu.LD46.Systems
             moveDirection = direction;
         }
 
-        public void Move(Transform origin, Transform model)
+        public bool Move(Transform origin, Transform model)
         {
             origin.Translate(moveDirection * speed * Time.deltaTime);
             model.rotation = Quaternion.Slerp(model.rotation, Quaternion.LookRotation(moveDirection), speed * Time.deltaTime);
+            return true;
         }
 
         public void TriggerMovement(Transform transform)

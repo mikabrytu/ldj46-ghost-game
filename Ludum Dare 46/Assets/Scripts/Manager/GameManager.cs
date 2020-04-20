@@ -36,6 +36,7 @@ namespace Mikabrytu.LD46
             EventManager.AddListener<PlayerFixedStuffEvent>(OnPlayerFixed);
             EventManager.AddListener<PlayerReachBrokenStuffEvent>(OnPlayerSeeBrokenStuff);
             EventManager.AddListener<PlayerLeavingBrokenStuffEvent>(OnPlayerLeaveBrokenStuff);
+            EventManager.AddListener<PlayerFixingEvent>(OnPlayerFixing);
 
             CallMenu();
         }
@@ -76,8 +77,14 @@ namespace Mikabrytu.LD46
             SpawnGhost();
         }
 
+        private void OnPlayerFixing(PlayerFixingEvent e)
+        {
+            player.SetFixing(e.isFixing);
+        }
+
         private void OnPlayerFixed(PlayerFixedStuffEvent e)
         {
+            player.SetFixing(false);
             uiManager.ShowWarning(false, Vector2.zero);
             uiManager.ShowMessage(false, e.type);
             availableTypes.Add(e.type);
